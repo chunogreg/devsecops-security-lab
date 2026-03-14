@@ -1,0 +1,74 @@
+name: DevSecOps Security Lab
+
+on:
+  push:
+    branches: [main]
+
+jobs:
+  # 1 SAST scan
+  semgrep:
+    name: SAST Scan with Semgrep
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Semgrep
+        uses: returntocorp/semgrep-action@v1
+        with:
+          config: ./semgrep-rules.yml
+        continue-on-error: true
+  # 2 Secret scanning
+  gitleaks:
+    name: Secret Scan with Gitleaks
+    runs-on: ubuntu-latest
+    needs: semgrep
+    steps:
+      - uses: actions/checkout@v4
+      - name: Run Gitleaks
+        uses: zricethezav/gitleaks-action@v2
+        with:
+          config-path: ./gitleaks-config.toml
+        continue-on-error: true
+  # 3 Dependency scan
+  dependency-scan:
+    name: Dependency Vunerability Scan
+    runs-on: ubuntu-latest
+    needs: gitleaks
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install dependencies
+        run: npm install
+      - name: Run npm audit
+        run: npm audit --audit-level=moderate || true
+
+  # 4 Build Docker image
+  docker-build:
+    name: Build Docker Image
+    runs-on: ubuntu-latest
+    needs: dependency-scan
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build Docker image
+        run: docker build -t devsecops-lab-app .
+
+  # 5 Container scan
+  trivy-scan:
+    name: Container Scan with Trivy
+    runs-on: ubuntu-latest
+    needs: docker-build
+    steps:
+      - uses: actions/checkout@v4
+      - name: Scan Docker image
+        uses: aquasecurity/trivy-action@master
+        with:
+          image-ref: devsecops-lab-app
+  # 6 Dynamic Scan (optional, requires running app)
+  dast-zap:
+    name: Dynamic Scan with OWASP ZAP
+    runs-on: ubuntu-latest
+    needs: docker-build
+    steps:
+      - uses: actions/checkout@v4
+      - name: Start application container
+        run: docker run -d -p 3000:3000 devsecops-lab-app
+      - name: Run Zap Scan
+        run: docker run --rm -v $(pwd)/zap:/zap/wrk/:rw -t owasp/zap2docker-stable zap-baseline.py -t http://host.docker.internal:3000 -r zap_report.html

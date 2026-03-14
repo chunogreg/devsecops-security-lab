@@ -1,0 +1,22 @@
+title = "DecSecOps Lab Secret Detection"
+
+[extend]
+useDefault = true
+
+[[rules]]
+description = "Generic API key"
+id = "generic-api-key"
+regex = '''(?i)api[_-]?key\s*=\s*['"][A-Za-z0-9]{16,}['"]'''
+tags = ["key" "API"]
+
+[[rules]]
+description = "Hardcoded password"
+id = "Hardcoded-password"
+regex = '''(?i)password\s*['"].+['"]'''
+tags: ["password", "credential"]
+
+[[rules]]
+description = "Private token"
+id = "Private-token"
+regex = '''(?i)token\s*=\s*['"][A-Za-z0-9\-_]{20,}['"]'''
+tags: ["token"]
