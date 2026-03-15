@@ -41,3 +41,37 @@ Github Action
 ## Purpose
 
 This lab demonstrates practical DevSecOps security automation techniques used in modern cloud-native environments
+
+---
+
+## Pipeline Architecture Diagram
+
+Developer Push
+
+&darr;
+
+GitHub Actions Pipeline
+
+&darr;
+
+Semgrep (SAST)
+
+&darr;
+
+GitLeaks (Eecret)
+
+&darr;
+
+npm audit (Dependencies)
+
+&darr;
+
+Docker Build
+
+&darr;
+
+Trivy (Container Scan)
+
+&darr;
+
+OWASP ZAP (DAST)
