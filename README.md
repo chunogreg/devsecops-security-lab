@@ -1,50 +1,24 @@
-# DevSecOps Security Lab
+# DevSecOps CI/CD Security Pipeline
 
-## Overview
+## Problem
 
-This project demonstrate a complete DevSecOps security pipeline integrating multiple security scanning tools within Github Actions.
+Modern applications are deployed without proper security checks, leading to vulnerabilities.
 
----
+## Solution
 
-## Security Tools Integrated
+This project implements a secure CI/CD pipeline that integrates multiple security tools to detect vulnerabilities early.
 
+## Tools used
+
+- GitHub Action (CI/CD)
+- Docker (containerization)
 - Semgrep (SAST)
-- Gitleaks (Secret Detection)
-- npm audit (Dependency Scanning)
-- Trivy (Container Scanning)
-- OWASP ZAP (Dynamic Application Security Testing)
+- Gitleaks (secret scanning)
+- npm audit (dependency scanning)
+- Trivy (container scanning)
+- OWASP ZAP (DAST)
 
----
-
-## CI/CD Pipeline
-
-The security pipeline runs authomatically on every push and performs:
-
-1. Static code analysis
-2. Secret scanning
-3. Dependency vulnerability detection
-4. Container vulnerability scanning
-5. Dynamic security testing
-
----
-
-## Teck Stack
-
-Node.js
-
-Docker
-
-Github Action
-
----
-
-## Purpose
-
-This lab demonstrates practical DevSecOps security automation techniques used in modern cloud-native environments
-
----
-
-## Pipeline Architecture Diagram
+## Pipeline Flow
 
 Developer Push
 
@@ -58,11 +32,11 @@ Semgrep (SAST)
 
 &darr;
 
-GitLeaks (Eecret)
+GitLeaks (secret scan)
 
 &darr;
 
-npm audit (Dependencies)
+npm audit (Dependencies scan)
 
 &darr;
 
@@ -75,3 +49,8 @@ Trivy (Container Scan)
 &darr;
 
 OWASP ZAP (DAST)
+
+## Result
+
+- Early detection of vulnerabilities
+- Secure deployment pipeline
