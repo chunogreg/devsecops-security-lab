@@ -10,9 +10,9 @@ jobs:
     name: SAST Scan with Semgrep
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Run Semgrep
-        uses: returntocorp/semgrep-action@v1
+        uses: semgrep/semgrep-action@v1
         with:
           config: ./semgrep-rules.yml
         continue-on-error: true
@@ -22,7 +22,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: semgrep
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Run Gitleaks
         uses: zricethezav/gitleaks-action@v2
         with:
@@ -34,7 +34,7 @@ jobs:
     runs-on: ubuntu-latest
     needs: gitleaks
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
       - name: Install dependencies
         run: npm install
       - name: Run npm audit
@@ -46,7 +46,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v6
 
       - name: Build Docker image
         run: docker build -t devsecops-lab-app .
@@ -63,7 +63,7 @@ jobs:
 
     steps:
       - name: Checkout repository
-        uses: actions/checkout@v4.2.2
+        uses: actions/checkout@v6
 
       - name: Build Docker image
         run: docker build -t devsecops-lab-app .
